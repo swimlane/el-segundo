@@ -25,7 +25,7 @@
     "html-coverage": "nyc report --reporter=html",
     "send-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
     "changelog": "chg release -y && git add -A CHANGELOG.md",
-    "version": "npm-run-all changelog release",
+    "version": "npm-run-all changelog build",
     "np": "npm run build && np",
     "bench": "npm run build && grunion ./benchmark/*.js"
   },
