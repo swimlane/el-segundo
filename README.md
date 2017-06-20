@@ -24,7 +24,7 @@ In fact this may be the fasted method to deep dirty check an object in JavaScrip
 4) This method only supports value types that have JSON representations.
 5) Does not support a way to conditionally ignore portions of objects.  For example properties the begin with `$`.
 
-`El Segundo` is designed to encapsulate this dirty checking process while addressing the issues above.  It does not, and likely never will, be faster than `JSON.stringify` in cases where the object has not changed (i.e. is not dirty), but can relaize a notible improvment when the objetc is dirty.
+`El Segundo` is designed to encapsulate this dirty checking process while addressing the issues above.  It does not, and likely never will, be faster than `JSON.stringify` in cases where the object has not changed (i.e. is not dirty), but can realize a notable improvment when the object is dirty.
 
 ## Features
 
@@ -116,7 +116,7 @@ Would store the cached object:
 Later, when the value of `leia` is checked:
 
 ```
-const isDirty = isDirty.check(leia);
+isDirty.check(leia);
 ```
 
 The `ElSegundo.protyotype.check` method will test equality (`===`) of each deeply nested value in `leia` to determine if any values have changed.  Once a single value has been detected that fails the equality test, the `check` is aborted with a return value of `true`.  If all values pass the equality tests, and all keys within the cached map have been checked, the `check` will a return value of `false`.
