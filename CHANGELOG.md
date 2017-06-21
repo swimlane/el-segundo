@@ -2,7 +2,8 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* Feature: added generateSnapshot and matchesSnapshot to public methods
+* Feature: added diff to generate map of changes
 
 --------------------
 

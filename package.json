@@ -68,6 +68,6 @@
     ]
   },
   "dependencies": {
-    "tslib": "^1.6.0"
+    "tslib": "^1.7.1"
   }
 }

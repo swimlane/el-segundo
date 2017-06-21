@@ -87,6 +87,38 @@ function generateSnapshot (subject, ignore?) {
   }
 }
 
+function snapshotDiff (lhs, rhs): Object[] {
+  const lkeys = Object.keys(lhs);
+  const rkeys = Object.keys(rhs);
+  const changes = Object.create(null);
+
+  lkeys.forEach(k => {
+    const other = rkeys.indexOf(k);
+    if (other > -1) {
+      rkeys.splice(other, 1);
+      if (!identical(lhs[k], rhs[k])) {
+        changes[k] = {
+          is: lhs[k],
+          was: rhs[k]
+        };
+      }
+    } else {
+      changes[k] = {
+        is: lhs[k],
+        was: undefined
+      };
+    }
+  });
+  rkeys.forEach(k => {
+    changes[k] = {
+      is: undefined,
+      was: rhs[k]
+    };
+  });
+
+  return changes;
+}
+
 export class ElSegundo {
   private _snapshot: any;
 
@@ -107,12 +139,25 @@ export class ElSegundo {
     return matchesSnapshot(subject, snapshot, _ignore);
   }
 
-  resetSnapshot (map: any) {
-    this._snapshot = generateSnapshot(map, this._ignore);
+  resetSnapshot (map: any): void {
+    this._snapshot = this.generateSnapshot(map);
   }
 
-  check (subject) {
-    return !matchesSnapshot(subject, this._snapshot, this._ignore);
+  generateSnapshot (subject): Object {
+    return generateSnapshot(subject, this._ignore);
+  }
+
+  matchesSnapshot (subject): boolean {
+    return matchesSnapshot(subject, this._snapshot, this._ignore);
+  }
+
+  check (subject): boolean {
+    return !this.matchesSnapshot(subject);
+  }
+
+  diff (subject): Object[] {
+    const snap = this.generateSnapshot(subject);
+    return snapshotDiff(snap, this._snapshot);
   }
 
   private _ignore (key) {

@@ -44,7 +44,7 @@ In fact this may be the fasted method to deep dirty check an object in JavaScrip
 | lodash          | ✓           | ✓               | ✓                 | ✓              | ✘ <sup>3<sup>  |
 
 1. Possible using `replacer` parameter... Non JSON types not tested.
-2. Possible by inspecting the difference results... not tested
+2. Possible using prefilter and inspecting the difference results... not tested
 3. Keys can be ignored using `lodash.isEqualWith` & `lodash.isMatchWidth`, but neither options supports all cases.
 
 ![alt text](benchmarks.png)
