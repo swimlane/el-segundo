@@ -2,7 +2,8 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* Changed linting extend tslint-config-swimlane
+* Now: Targets ES5
 
 --------------------
 

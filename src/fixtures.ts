@@ -46,7 +46,9 @@ export const fixture = {
     email: 'gomez.bryan@zoid.info',
     phone: '+1 (852) 549-3677',
     address: '915 Osborn Street, Clay, New York, 7776',
-    about: 'Nulla commodo est aute quis. Sunt occaecat officia eu ullamco laboris adipisicing cupidatat culpa voluptate culpa exercitation magna fugiat aliqua. Nostrud Lorem irure aliqua irure in eu laborum id do minim consectetur.',
+    about: `Nulla commodo est aute quis. Sunt occaecat officia eu ullamco laboris
+     adipisicing cupidatat culpa voluptate culpa exercitation magna fugiat aliqua.
+     Nostrud Lorem irure aliqua irure in eu laborum id do minim consectetur.`,
     registered: 'Thursday, April 13, 2017 2:52 PM',
     latitude: 37.197061,
     longitude: 135.771568
@@ -57,7 +59,7 @@ export const fixture = {
   },
   trickyValues: {
     nan: NaN,
-    'null': null,
+    null: null,
     nZero: -0,
     pZero: +0
   }

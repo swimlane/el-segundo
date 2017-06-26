@@ -126,19 +126,19 @@ test('#check should return false id ignored field is added', t => {
 });
 
 test('ElSegundo supports custom ignore', t => {
-  const isDirty = new ElSegundo(fixture, {ignore: (key) => 'sub'});
+  const _isDirty = new ElSegundo(fixture, {ignore: (key) => 'sub'});
 
   const o = deepClone(fixture);
   o.sub = {};
-  t.false(isDirty.check(o));
+  t.false(_isDirty.check(o));
 });
 
 test('ElSegundo supports ignoring none', t => {
-  const isDirty = new ElSegundo(fixture, {ignore: false});
+  const _isDirty = new ElSegundo(fixture, {ignore: false});
 
   const o = deepClone(fixture);
   o.$hidden = false;
-  t.true(isDirty.check(o));
+  t.true(_isDirty.check(o));
 });
 
 test('#diff should return the differences when a value has changed', t => {
