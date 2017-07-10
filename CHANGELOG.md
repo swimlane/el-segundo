@@ -2,9 +2,12 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* Feature: default now ignores undefined values
+_(none)_
 
 --------------------
+
+## 2.0.0 (2017-07-10)
+* Feature: default now ignores undefined values
 
 ## 1.1.1 (2017-06-26)
 * Changed linting extend tslint-config-swimlane
