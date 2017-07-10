@@ -125,6 +125,18 @@ test('#check should return false id ignored field is added', t => {
   t.false(isDirty.check(o));
 });
 
+test('#check should treat undefined values the same as missing keys', t => {
+  const o = deepClone(fixture);
+  o.missingKey = undefined;
+  t.false(isDirty.check(o));
+});
+
+test('#check should treat missing keys teh same as undefined values', t => {
+  const o = deepClone(fixture);
+  delete o.undefinedValue;
+  t.false(isDirty.check(o));
+});
+
 test('ElSegundo supports custom ignore', t => {
   const _isDirty = new ElSegundo(fixture, {ignore: (key) => 'sub'});
 

@@ -20,7 +20,7 @@ function identical(a: any, b: any): boolean {
   return a !== a && b !== b;
 }
 
-function matchesSnapshot(subject: any, snapshot: any, ignore: (key: string) => boolean): boolean {
+function matchesSnapshot(subject: any, snapshot: any, ignore: (key: string, value: any) => boolean): boolean {
   const seen = new WeakMap();
   return recurse(subject, REF);
 
@@ -41,7 +41,7 @@ function matchesSnapshot(subject: any, snapshot: any, ignore: (key: string) => b
     seen.set(s, path);
     let keys = Object.keys(s);
     if (ignore) {
-      keys = keys.filter(key => !ignore(key));
+      keys = keys.filter(key => !ignore(key, s[key]));
     }
     let index = keys.length;
     if (index !== snapshot[path]) return false;
@@ -54,7 +54,7 @@ function matchesSnapshot(subject: any, snapshot: any, ignore: (key: string) => b
   }
 }
 
-function generateSnapshot(subject: any, ignore?: (key: string) => boolean) {
+function generateSnapshot(subject: any, ignore?: (key: string, value: any) => boolean) {
   const seen = new WeakMap();
   const map = {};
   return recurse(subject, REF);
@@ -75,7 +75,7 @@ function generateSnapshot(subject: any, ignore?: (key: string) => boolean) {
     seen.set(s, path);
     let keys = Object.keys(s);
     if (ignore) {
-      keys = keys.filter(key => !ignore(key));
+      keys = keys.filter(key => !ignore(key, s[key]));
     }
     let index = keys.length;
     map[path] = index;
@@ -119,14 +119,16 @@ function snapshotDiff(lhs, rhs): any[] {
   return changes;
 }
 
+const defultIgnore = (key: string, value: any) => value === undefined || key[0] === '$';
+
 export class ElSegundo {
   /* istanbul ignore next  */
-  static generateSnapshot(subject, _ignore = key => key[0] === '$') {
+  static generateSnapshot(subject, _ignore = defultIgnore) {
     return generateSnapshot(subject, _ignore);
   }
 
   /* istanbul ignore next  */
-  static matchesSnapshot(subject, snapshot, _ignore = key => key[0] === '$') {
+  static matchesSnapshot(subject, snapshot, _ignore = defultIgnore) {
     return matchesSnapshot(subject, snapshot, _ignore);
   }
 
@@ -162,7 +164,7 @@ export class ElSegundo {
     return snapshotDiff(snap, this._snapshot);
   }
 
-  private _ignore(key: string): boolean {
-    return key[0] === '$';
+  private _ignore(key: string, value: any): boolean {
+    return value === undefined || key[0] === '$';
   }
 }

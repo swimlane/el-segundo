@@ -62,5 +62,6 @@ export const fixture = {
     null: null,
     nZero: -0,
     pZero: +0
-  }
+  },
+  undefinedValue: undefined
 };
