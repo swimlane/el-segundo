@@ -6,13 +6,13 @@ const isMatchWith = require('lodash.ismatchwith');
 const clone = require('lodash.clonedeepwith');
 
 const fixture = require('./fixtures/fixture');
-const {replacer, ignoreKeys, cloner} = require('./fixtures/utils');
+const { ignoreKeys, cloner } = require('./fixtures/utils');
 
 const { ElSegundo } = require('..');
 
 const deepdiff = require('deep-diff');
+const fastDeepEqual = require('fast-deep-equal');
 
-const fixtureString = JSON.stringify(fixture);
 const fixtureClone = clone(fixture, cloner);
 
 const isDirty = new ElSegundo(fixture);
@@ -51,6 +51,10 @@ test('key order changed, dirty check returns false', function (t) {
 
     s.bench('lodash.isMatchWith', () => {
       dirtyResult = !isMatchWith(subject, fixtureClone, ignoreKeys);
+    });
+
+    s.bench('fast-deep-equal', () => {
+      dirtyResult = !fastDeepEqual(subject, fixtureClone);
     });
   });
 });

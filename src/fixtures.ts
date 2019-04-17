@@ -63,5 +63,9 @@ export const fixture = {
     nZero: -0,
     pZero: +0
   },
+  specialObject: {
+    date: new Date('1/1/1990'),
+    regex: new RegExp('/.*/')
+  },
   undefinedValue: undefined
 };

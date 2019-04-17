@@ -11,6 +11,7 @@ const {replacer, ignoreKeys, cloner} = require('./fixtures/utils');
 const { ElSegundo } = require('..');
 
 const deepdiff = require('deep-diff');
+const fastDeepEqual = require('fast-deep-equal');
 
 const fixtureString = JSON.stringify(fixture, replacer);
 const fixtureClone = clone(fixture, cloner);
@@ -53,6 +54,10 @@ test('values equal, dirty check returns false', function (t) {
 
     s.bench('lodash.isMatchWith', () => {
       dirtyResult = !isMatchWith(subject, fixtureClone, ignoreKeys);
+    });
+
+    s.bench('fast-deep-equal', () => {
+      dirtyResult = !fastDeepEqual(subject, fixtureClone);
     });
   });
 });

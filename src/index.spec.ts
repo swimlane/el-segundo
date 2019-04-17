@@ -1,6 +1,6 @@
-import { test } from 'ava';
+import test from 'ava';
 import { ElSegundo } from '.';
-import { fixture, leia, luke } from './fixtures';
+import { fixture } from './fixtures';
 import * as deepClone from 'lodash.clonedeep';
 
 const isDirty = new ElSegundo(fixture);
@@ -83,10 +83,46 @@ test('#check should return true when NaN values become not NaN', t => {
   t.true(isDirty.check(o));
 });
 
-test('#check should return true when NaN value remains NaN', t => {
+test('#check should return false when NaN value remains NaN', t => {
   const o = deepClone(fixture);
   o.trickyValues.nan = NaN;
   t.false(isDirty.check(o));
+});
+
+test('#check should return false when dates are equal', t => {
+  const o = deepClone(fixture);
+  o.specialObject.date = new Date('1/1/1990');
+  t.false(isDirty.check(o));
+});
+
+test('#check should return true when dates changes', t => {
+  const o = deepClone(fixture);
+  o.specialObject.date = new Date('1/2/1990');
+  t.true(isDirty.check(o));
+});
+
+test('#check should return true when dates changes type', t => {
+  const o = deepClone(fixture);
+  o.specialObject.date = (new Date('1/2/1990')).getTime();
+  t.true(isDirty.check(o));
+});
+
+test('#check should return false when regex are equal', t => {
+  const o = deepClone(fixture);
+  o.specialObject.regex = new RegExp('/.*/');
+  t.false(isDirty.check(o));
+});
+
+test('#check should return true when regex changes', t => {
+  const o = deepClone(fixture);
+  o.specialObject.regex = new RegExp('/.*/', 'g');
+  t.true(isDirty.check(o));
+});
+
+test('#check should return true when regex changes type', t => {
+  const o = deepClone(fixture);
+  o.specialObject.regex = (new RegExp('/.*/', 'g')).toString();
+  t.true(isDirty.check(o));
 });
 
 test('#check should return false when sign of zero value changes (+/-0)', t => {
@@ -178,5 +214,3 @@ test('#diff should return the differences when a value is removed', t => {
     '#/sub/name/first': { is: undefined, was: 'Gomez'}
   } as any);
 });
-
-// console.log(isDirty.generateSnapshot(fixture.characters.leia));

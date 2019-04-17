@@ -10,8 +10,6 @@ const {replacer, ignoreKeys, cloner} = require('./fixtures/utils');
 
 const { ElSegundo } = require('..');
 
-const deepdiff = require('deep-diff');
-
 const fixtureString = JSON.stringify(fixture, replacer);
 const fixtureClone = clone(fixture, cloner);
 
@@ -32,8 +30,6 @@ test('ignored value added, dirty check returns false', function (t) {
       dirtyResult = null;
     });
 
-
-    
     s.burn('Theoretical max', () => {
       dirtyResult = 'a' !== 'a';
     });
@@ -46,19 +42,10 @@ test('ignored value added, dirty check returns false', function (t) {
       dirtyResult = isDirty.check(subject);
     });
 
-    /*
-    s.bench('deep-diff', () => {
-      dirtyResult = typeof deepdiff(fixtureClone, b) === 'object';
-    });
-    */
-
-    /* Not supported
-    s.bench('lodash.isEqualWith', () => {
-      dirtyResult = !isEqualWith(b, fixtureClone, ignoreKeys);
-    });  */
-
     s.bench('lodash.isMatchWith', () => {
       dirtyResult = !isMatchWith(subject, fixtureClone, ignoreKeys);
     });
+
+
   });
 });

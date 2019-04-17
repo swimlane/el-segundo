@@ -1,19 +1,16 @@
 const suite = require('chuhai');
 const test = require('blue-tape');
 
-const isEqualWith = require('lodash.isequalwith');
-const isMatchWith = require('lodash.ismatchwith');
 const clone = require('lodash.clonedeepwith');
 
 const fixture = clone(require('./fixtures/fixture'));
-const {replacer, ignoreKeys, cloner} = require('./fixtures/utils');
+const {replacer} = require('./fixtures/utils');
 
 const { ElSegundo } = require('..');
 
 const deepdiff = require('deep-diff');
 
 const fixtureString = JSON.stringify(fixture, replacer);
-const fixtureClone = clone(fixture, cloner);
 
 const isDirty = new ElSegundo(fixture);
 
@@ -43,21 +40,5 @@ test('ignored value removed, dirty check returns false', function (t) {
     s.bench('El Segundo', () => {
       dirtyResult = isDirty.check(subject);
     });
-
-    /*
-    s.bench('deep-diff', () => {
-      dirtyResult = typeof deepdiff(fixtureClone, b) === 'object';
-    });
-    */
-
-    /* Not supported
-    s.bench('lodash.isEqualWith', () => {
-      dirtyResult = !isEqualWith(b, fixtureClone, ignoreKeys);
-    });
-    
-    Not supported 
-    s.bench('lodash.isMatchWith', () => {
-      dirtyResult = !isMatchWith(b, fixtureClone, ignoreKeys);
-    });*/
   });
 });

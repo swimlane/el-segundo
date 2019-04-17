@@ -2,7 +2,7 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* Support deep equality for Date and RegExp
 
 --------------------
 

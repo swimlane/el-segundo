@@ -3,6 +3,12 @@ const SEP = '/';
 const REF = '#';
 const NULL = Symbol('null');
 
+interface Snapshot {
+  [path: string]: any;
+}
+
+type IgnoreFunction = (key: string, value: any) => boolean;
+
 /**
  * Returns true if its arguments are identical, false otherwise. Values are
  * identical if they reference the same memory. `NaN` is identical to `NaN`;
@@ -11,22 +17,30 @@ const NULL = Symbol('null');
  * from: https://github.com/ramda/ramda/blob/v0.24.1/src/identical.js
  *
  */
-
 function identical(a: any, b: any): boolean {
-  if (a === b) { // Steps 1-5, 7-10
-    return true;
-  }
+  if (a === b) return true;
+
+  const dateA = a instanceof Date;
+  const dateB = b instanceof Date;
+  if (dateA !== dateB) return false;
+  if (dateA && dateB) return a.getTime() === b.getTime();
+
+  const regexpA = a instanceof RegExp;
+  const regexpB = b instanceof RegExp;
+  if (regexpA !== regexpB) return false;
+  if (regexpA && regexpB) return a.toString() === b.toString();
+
   // NaN == NaN
   return a !== a && b !== b;
 }
 
-function matchesSnapshot(subject: any, snapshot: any, ignore: (key: string, value: any) => boolean): boolean {
+function matchesSnapshot(subject: any, snapshot: any, ignore: IgnoreFunction): boolean {
   const seen = new WeakMap();
   return recurse(subject, REF);
 
   function recurse(s: any, path: string) {
 
-    if (typeof s !== 'object') {
+    if (typeof s !== 'object' || s instanceof Date || s instanceof RegExp) {
       return identical(s, snapshot[path]);
     }
 
@@ -54,13 +68,13 @@ function matchesSnapshot(subject: any, snapshot: any, ignore: (key: string, valu
   }
 }
 
-function generateSnapshot(subject: any, ignore?: (key: string, value: any) => boolean) {
+function generateSnapshot(subject: any, ignore?: IgnoreFunction): Snapshot {
   const seen = new WeakMap();
   const map = {};
   return recurse(subject, REF);
 
   function recurse(s: any, path: string) {
-    if (typeof s !== 'object') {
+    if (typeof s !== 'object' || s instanceof Date || s instanceof RegExp) {
       return map[path] = s;
     }
 
@@ -73,6 +87,7 @@ function generateSnapshot(subject: any, ignore?: (key: string, value: any) => bo
     }
 
     seen.set(s, path);
+
     let keys = Object.keys(s);
     if (ignore) {
       keys = keys.filter(key => !ignore(key, s[key]));
@@ -87,7 +102,7 @@ function generateSnapshot(subject: any, ignore?: (key: string, value: any) => bo
   }
 }
 
-function snapshotDiff(lhs, rhs): any[] {
+function snapshotDiff(lhs: object, rhs: object): any[] {
   const lkeys = Object.keys(lhs);
   const rkeys = Object.keys(rhs);
   const changes = Object.create(null);
@@ -119,22 +134,22 @@ function snapshotDiff(lhs, rhs): any[] {
   return changes;
 }
 
-const defultIgnore = (key: string, value: any) => value === undefined || key[0] === '$';
+const defultIgnore: IgnoreFunction = (key: string, value: any) => value === undefined || key[0] === '$';
 
 export class ElSegundo {
   /* istanbul ignore next  */
-  static generateSnapshot(subject, _ignore = defultIgnore) {
+  static generateSnapshot(subject: any, _ignore = defultIgnore): Snapshot {
     return generateSnapshot(subject, _ignore);
   }
 
   /* istanbul ignore next  */
-  static matchesSnapshot(subject, snapshot, _ignore = defultIgnore) {
+  static matchesSnapshot(subject: any, snapshot: any, _ignore = defultIgnore): boolean {
     return matchesSnapshot(subject, snapshot, _ignore);
   }
 
-  private _snapshot: any;
+  private _snapshot: Snapshot;
 
-  get map() {
+  get map(): Snapshot {
     return this._snapshot;
   }
 
@@ -143,23 +158,23 @@ export class ElSegundo {
     this.resetSnapshot(map);
   }
 
-  resetSnapshot(map: any): void {
-    this._snapshot = this.generateSnapshot(map);
+  resetSnapshot(subject: any): void {
+    this._snapshot = this.generateSnapshot(subject);
   }
 
-  generateSnapshot(subject): any {
+  generateSnapshot(subject: any): Snapshot {
     return generateSnapshot(subject, this._ignore);
   }
 
-  matchesSnapshot(subject): boolean {
+  matchesSnapshot(subject: any): boolean {
     return matchesSnapshot(subject, this._snapshot, this._ignore);
   }
 
-  check(subject): boolean {
+  check(subject: any): boolean {
     return !this.matchesSnapshot(subject);
   }
 
-  diff(subject): any[] {
+  diff(subject: any): any[] {
     const snap = this.generateSnapshot(subject);
     return snapshotDiff(snap, this._snapshot);
   }
