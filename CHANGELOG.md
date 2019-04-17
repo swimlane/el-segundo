@@ -2,9 +2,12 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* Support deep equality for Date and RegExp
+_(none)_
 
 --------------------
+
+## 2.1.0 (2019-04-17)
+* Support deep equality for Date and RegExp
 
 ## 2.0.0 (2017-07-10)
 * Feature: default now ignores undefined values
