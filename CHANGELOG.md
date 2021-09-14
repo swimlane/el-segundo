@@ -2,7 +2,10 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* Update various dependecies
+* Move from tslint to eslint
+* Added prettier
+* Minor speed improvements
 
 --------------------
 

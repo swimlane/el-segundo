@@ -16,51 +16,59 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "lint": "tslint src/**/*.ts",
-    "unit": "nyc --extension .ts ava ./src/*.spec.ts",
-    "check-coverage": "nyc check-coverage --lines 100 --functions 100 --branches 100",
-    "test": "npm-run-all lint unit check-coverage",
+    "test": "run-s test:*",
+    "test:lint": "eslint \"src/**/*.{js,ts}\" --ext .ts",
+    "test:prettier": "prettier \"src/**/*.{ts,js,css,md}\" --check",
+    "test:unit": "nyc --extension .ts ava ./src/*.spec.ts",
+    "test:coverage": "nyc check-coverage --lines 100 --functions 100 --branches 100",
     "watch": "npm run build && concurrently -r --kill-others 'npm run --silent build -- -w' 'sleepms 2000 && ava ./dist/main/*.spec.js --watch'",
-    "cov": "npm-run-all unit html-coverage && opn coverage/index.html",
+    "cov": "npm-run-all test:unit html-coverage && open-cli coverage/index.html",
     "html-coverage": "nyc report --reporter=html",
     "send-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
     "changelog": "chg release -y && git add -A CHANGELOG.md",
     "version": "npm-run-all changelog build",
     "np": "npm run build && np",
-    "bench": "npm run build && grunion ./benchmark/*.js"
+    "bench": "npm run build && grunion ./benchmark/*.js",
+    "fix": "run-s fix:*",
+    "fix:prettier": "prettier \"src/**/*.ts\" --write",
+    "fix:lint": "eslint \"src/**/*.{js,ts}\" --ext .ts --fix"
   },
   "engines": {
     "node": ">=4"
   },
   "devDependencies": {
     "@ava/babel": "^2.0.0",
-    "@types/node": "^11.13.4",
+    "@swimlane/eslint-config": "^2.0.0",
+    "@swimlane/prettier-config-swimlane": "^3.0.3",
+    "@types/node": "^16.9.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
     "ava": "^3.15.0",
     "blue-tape": "^1.0.0",
-    "chg": "^0.3.2",
+    "chg": "^0.4.0",
     "chuhai": "^1.2.0",
-    "codecov": "^3.3.0",
-    "concurrently": "^4.1.0",
+    "codecov": "^3.8.3",
+    "concurrently": "^6.2.1",
     "deep-diff": "^1.0.2",
-    "fast-deep-equal": "^2.0.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "fast-deep-equal": "^3.1.3",
     "grunion": "^1.3.1",
-    "locate-path": "^4.0.0",
+    "locate-path": "^7.0.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.clonedeepwith": "^4.5.0",
     "lodash.isequal": "^4.5.0",
     "lodash.isequalwith": "^4.4.0",
     "lodash.ismatchwith": "^4.4.0",
-    "mimic-fn": "^2.1.0",
-    "mkdirp": "^0.5.1",
-    "np": "^4.0.2",
+    "mimic-fn": "^4.0.0",
+    "mkdirp": "^1.0.4",
+    "np": "^7.5.0",
     "npm-run-all": "^4.0.2",
     "nyc": "^15.1.0",
-    "opn-cli": "^4.1.0",
+    "opn-cli": "^5.0.0",
+    "prettier": "^2.4.0",
     "sleep-ms": "^2.0.1",
-    "ts-node": "^8.1.0",
-    "tslint": "^5.0.0",
-    "tslint-config-security": "^1.16.0",
-    "tslint-config-swimlane": "^4.0.0",
-    "typescript": "^3.4.3"
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
   },
   "keywords": [],
   "nyc": {
@@ -69,6 +77,6 @@
     ]
   },
   "dependencies": {
-    "tslib": "^1.7.1"
+    "tslib": "^2.3.1"
   }
 }
