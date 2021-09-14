@@ -1,4 +1,11 @@
-const leia: any = {
+interface Character {
+  role: string;
+  name: Record<string, string>;
+  siblings: Character[];
+  $hidden: boolean;
+}
+
+const leia: Character = {
   role: 'General',
   name: {
     first: 'Leia',
@@ -8,7 +15,7 @@ const leia: any = {
   $hidden: false
 };
 
-const luke: any = {
+const luke: Character = {
   role: 'Jedi',
   name: {
     first: 'Luke',

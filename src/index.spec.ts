@@ -19,7 +19,7 @@ test('#generateSnapshot should generate snapshot', t => {
 });
 
 test('#check should return false with a shallow clone', t => {
-  t.false(isDirty.check({...fixture}));
+  t.false(isDirty.check({ ...fixture }));
 });
 
 test('#check should return false with a deep clone', t => {
@@ -27,21 +27,21 @@ test('#check should return false with a deep clone', t => {
 });
 
 test('#check should return true with when not equal', t => {
-  t.true(isDirty.check({...fixture, string: 'a different string'}));
+  t.true(isDirty.check({ ...fixture, string: 'a different string' }));
 });
 
 test('#check should ignore hidden values', t => {
-  const o = {...fixture, $hidden: false};
+  const o = { ...fixture, $hidden: false };
   t.false(isDirty.check(o));
   t.deepEqual(isDirty.map, ElSegundo.generateSnapshot(o));
 });
 
 test('#check should return true when a key is added', t => {
-  t.true(isDirty.check({...fixture, string2: 'a different string'}));
+  t.true(isDirty.check({ ...fixture, string2: 'a different string' }));
 });
 
 test('#check should return true key removed', t => {
-  t.true(isDirty.check({...fixture, string: undefined}));
+  t.true(isDirty.check({ ...fixture, string: undefined }));
 });
 
 test('#check should return false key order changed', t => {
@@ -95,6 +95,12 @@ test('#check should return false when dates are equal', t => {
   t.false(isDirty.check(o));
 });
 
+test('#check should return true when date becomes a regex', t => {
+  const o = deepClone(fixture);
+  o.specialObject.date = new RegExp('what');
+  t.true(isDirty.check(o));
+});
+
 test('#check should return true when dates changes', t => {
   const o = deepClone(fixture);
   o.specialObject.date = new Date('1/2/1990');
@@ -103,7 +109,7 @@ test('#check should return true when dates changes', t => {
 
 test('#check should return true when dates changes type', t => {
   const o = deepClone(fixture);
-  o.specialObject.date = (new Date('1/2/1990')).getTime();
+  o.specialObject.date = new Date('1/2/1990').getTime();
   t.true(isDirty.check(o));
 });
 
@@ -115,13 +121,19 @@ test('#check should return false when regex are equal', t => {
 
 test('#check should return true when regex changes', t => {
   const o = deepClone(fixture);
+  o.specialObject.regex = new RegExp('/what/');
+  t.true(isDirty.check(o));
+});
+
+test('#check should return true when regex changes flag', t => {
+  const o = deepClone(fixture);
   o.specialObject.regex = new RegExp('/.*/', 'g');
   t.true(isDirty.check(o));
 });
 
 test('#check should return true when regex changes type', t => {
   const o = deepClone(fixture);
-  o.specialObject.regex = (new RegExp('/.*/', 'g')).toString();
+  o.specialObject.regex = new RegExp('/.*/', 'g').toString();
   t.true(isDirty.check(o));
 });
 
@@ -174,7 +186,7 @@ test('#check should treat missing keys teh same as undefined values', t => {
 });
 
 test('ElSegundo supports custom ignore', t => {
-  const _isDirty = new ElSegundo(fixture, {ignore: (key) => 'sub'});
+  const _isDirty = new ElSegundo(fixture, { ignore: _key => true });
 
   const o = deepClone(fixture);
   o.sub = {};
@@ -182,7 +194,7 @@ test('ElSegundo supports custom ignore', t => {
 });
 
 test('ElSegundo supports ignoring none', t => {
-  const _isDirty = new ElSegundo(fixture, {ignore: false});
+  const _isDirty = new ElSegundo(fixture, { ignore: false });
 
   const o = deepClone(fixture);
   o.$hidden = false;
@@ -194,7 +206,7 @@ test('#diff should return the differences when a value has changed', t => {
   o.sub.name.first = 'Eddie';
   t.deepEqual(isDirty.diff(o), {
     '#/sub/name/first': { is: 'Eddie', was: 'Gomez' }
-  } as any);
+  } as unknown);
 });
 
 test('#diff should return the differences when a value is added', t => {
@@ -203,7 +215,7 @@ test('#diff should return the differences when a value is added', t => {
   t.deepEqual(isDirty.diff(o), {
     '#/sub/name': { is: 3, was: 2 },
     '#/sub/name/middle': { is: 'M', was: undefined }
-  } as any);
+  } as unknown);
 });
 
 test('#diff should return the differences when a value is removed', t => {
@@ -211,6 +223,6 @@ test('#diff should return the differences when a value is removed', t => {
   delete o.sub.name.first;
   t.deepEqual(isDirty.diff(o), {
     '#/sub/name': { is: 1, was: 2 },
-    '#/sub/name/first': { is: undefined, was: 'Gomez'}
-  } as any);
+    '#/sub/name/first': { is: undefined, was: 'Gomez' }
+  } as unknown);
 });
