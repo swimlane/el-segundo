@@ -1,0 +1,39 @@
+name: Build, Test, and Deploy
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install
+      uses: bahmutov/npm-install@v1
+
+    - name: Build
+      run: |
+        npm run build --if-present
+      env:
+        CI: true
+
+    - name: Test
+      run: |
+        npm run test --if-present
+      env:
+        CI: true
+
+    - name: Audit
+      run: |
+        npm run audit --if-present
+      env:
+        CI: true
+
+    - name: Prepare and deploy
+      run: |
+        npm run deploy --if-present
+      if: ${{ github.ref == 'refs/heads/main' }}
+      env:
+        CI: true
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
