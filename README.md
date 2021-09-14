@@ -36,12 +36,13 @@ In fact this may be the fasted method to deep dirty check an object in JavaScrip
 
 ## Comparison with other methods
 
-| Method          | Early Abort | Circular Objects | Key Order Changes | Non JSON types | Hidden keys     | 
-|-----------------|-------------|------------------|-------------------|----------------|-----------------|
-| El Segundo      | ✓           | ✓               | ✓                 | ✓              | ✓              |
-| JSON.stringify  | ✘           | ✘               | ✘                 | ✓ <sup>1</sup> | ✓ <sup>1</sup> |
-| deep-diff       | ✘           | ✓               | ✓                 | ✓              | ✓ <sup>2</sup> |
-| lodash          | ✓           | ✓               | ✓                 | ✓              | ✘ <sup>3<sup>  |
+| Method          | Early Abort | Circular Objects | Key Order Changes | Non JSON types | Hidden keys    | Maps and Sets  |
+|-----------------|-------------|------------------|-------------------|----------------|----------------|----------------|
+| El Segundo      | ✓           | ✓                | ✓                 | ✓              | ✓              | ✘              |
+| JSON.stringify  | ✘           | ✘                | ✘                 | ✘ <sup>1</sup> | ✓ <sup>1</sup> | ✘ <sup>1</sup> |
+| deep-diff       | ✘           | ✓                | ✓                 | ✓              | ✓ <sup>2</sup> | ✘ <sup>2<sup>  |
+| lodash          | ✓           | ✓                | ✓                 | ✓              | ✘ <sup>3<sup>  | ✘ <sup>2<sup>  |
+| fast-deep-equal | ✓           | ✘ <sup>2</sup>   | ✘                 | ✓              | ✓ <sup>2</sup> | ✓              |
 
 1. Possible using `replacer` parameter... Non JSON types not tested.
 2. Possible using prefilter and inspecting the difference results... not tested
