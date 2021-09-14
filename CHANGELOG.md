@@ -2,12 +2,15 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
+_(none)_
+
+--------------------
+
+## 2.2.0 (2021-09-14)
 * Update various dependecies
 * Move from tslint to eslint
 * Added prettier
 * Minor speed improvements
-
---------------------
 
 ## 2.1.0 (2019-04-17)
 * Support deep equality for Date and RegExp
