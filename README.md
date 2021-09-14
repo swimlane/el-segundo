@@ -6,7 +6,7 @@ I don't always do dirty checking, but when I do, I use El Segundo.  The second c
 
 In JavaScript there is no built-in method to determine if values within an Object (or Array) have changed.  One well known method is to compare the JSON stringified version of an object to a previous value.  For example:
 
-```
+```js
 const A = {...};
 
 const prevValue = JSON.stringify(A);
@@ -52,7 +52,7 @@ In fact this may be the fasted method to deep dirty check an object in JavaScrip
 
 ## How to use
 
-```
+```js
 import { ElSegundo } from 'el-segundo';
 
 const A = {...};
@@ -68,7 +68,7 @@ const isDirty = isDirty.check(A);  // returns true if any value in A has changed
 
 When an `ElSegundo` object is created it internally stores a map of path-value pairs.  For example, the following object:
 
-```
+```js
 const leia = {
   role: 'General',
   name: {
@@ -96,7 +96,7 @@ const isDirty = new ElSegundo(leia);
 
 Would store the cached object:
 
-```
+```js
 {
   '#': 3,
   '#/siblings': 1,
