@@ -33,7 +33,7 @@
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:lint": "eslint \"src/**/*.{js,ts}\" --ext .ts --fix",
     "audit": "run-s audit:*",
-    "audit:npm": "npm audit",
+    "audit:npm": "npm audit --production",
     "audit:npm-check": "npm-check --skip-unused || true",
     "npm-update": "npm-check --skip-unused -u"
   },
@@ -72,7 +72,7 @@
     "npm-run-all": "^4.0.2",
     "nyc": "^15.1.0",
     "opn-cli": "^5.0.0",
-    "prettier": "^2.4.0",
+    "prettier": "^2.4.1",
     "sleep-ms": "^2.0.1",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
